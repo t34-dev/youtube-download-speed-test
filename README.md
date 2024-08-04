@@ -1,6 +1,23 @@
-# YouTube Tools
+# YouTube Video Analyzer and Downloader
 
-This repository contains a set of Python scripts for analyzing YouTube URLs, measuring download speeds, and downloading videos. The tools are designed to work together and can be easily used via the provided Makefile.
+A comprehensive toolkit for analyzing and downloading YouTube videos, playlists, and channels.
+
+## Key Features:
+- URL analysis for single videos, playlists, and channels
+- High-quality video downloading
+- Download speed testing
+- Proxy support
+- Detailed debug information
+- Results logging
+
+Built with yt-dlp and moviepy for robust YouTube interaction and video processing.
+
+## Main Components:
+- `main_analyze.py`: URL analysis and video info collection
+- `main_download.py`: Video downloading
+- `main_ping.py`: Download speed testing
+
+Utilizes a Makefile for easy task execution and project management.
 
 ## Table of Contents
 
