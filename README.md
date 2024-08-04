@@ -1,6 +1,6 @@
 # YouTube Video Analyzer and Downloader
 
-A comprehensive toolkit for analyzing and downloading YouTube videos, playlists, and channels.
+A comprehensive toolkit for analyzing and downloading YouTube videos, playlists.
 
 ## Key Features:
 - URL analysis for single videos, playlists, and channels
