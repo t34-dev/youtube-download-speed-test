@@ -146,7 +146,7 @@ def main():
     os.makedirs(args.output_dir, exist_ok=True)
 
     # Read URLs from input file
-    with open(args.input, 'r') as input_file:
+    with open(args.input, 'r', encoding='utf-8') as input_file:
         input_urls = [line.strip() for line in input_file if line.strip()]
 
     # Process URLs to extract all video URLs, including those from playlists
@@ -154,7 +154,7 @@ def main():
     total_videos = len(all_video_urls)
     print(f"\nTotal videos to download: {total_videos}")
 
-    with open(args.output_result, 'w') as result_file:
+    with open(args.output_result, 'w', encoding='utf-8') as result_file:
         for index, video_url in enumerate(all_video_urls, start=1):
             print(f"Processing video {index}/{total_videos}: {video_url}")
             status, output_path = process_video(video_url, args.output_dir, max_quality=args.max_quality)
