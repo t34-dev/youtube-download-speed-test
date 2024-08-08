@@ -8,7 +8,7 @@ from utils import get_best_video_and_audio_url
 
 DEFAULT_VIDEO_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 DEFAULT_DURATION = 10
-CHUNK_SIZE = 1 * 1024 * 1024  # 1 MB
+CHUNK_SIZE = 2 * 1024 * 1024  # 1 MB
 DEBUG = False
 
 def debug_print(*args, **kwargs):
