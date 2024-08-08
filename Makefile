@@ -24,6 +24,7 @@ help:
 	@echo ""
 	@echo "Example:"
 	@echo "  make ping URL=https://www.youtube.com/watch?v=dQw4w9WgXcQ DURATION=30 PROXY=socks5://127.0.0.1:9150 DEBUG=1"
+	@echo "  make ping DURATION=60"
 	@echo ""
 	@echo "========================================"
 	@echo "Analyze - Extract video URLs from a list"

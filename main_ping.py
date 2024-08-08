@@ -8,7 +8,7 @@ from utils import get_best_video_and_audio_url
 
 DEFAULT_VIDEO_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 DEFAULT_DURATION = 10
-CHUNK_SIZE = 2 * 1024 * 1024  # 1 MB
+CHUNK_SIZE = 1 * 1024 * 1024  # 1 MB
 DEBUG = False
 
 def debug_print(*args, **kwargs):
@@ -21,7 +21,8 @@ def measure_download_speed(url, duration=DEFAULT_DURATION, proxy=None):
     peak_speed = 0
     last_update_time = start_time
     retry_delay = 1
-    chunk_times = []  # New: List to store time taken for each chunk
+    chunk_times = []
+    last_chunk_time = 0
 
     proxies = {'http': proxy, 'https': proxy} if proxy else None
 
@@ -30,13 +31,14 @@ def measure_download_speed(url, duration=DEFAULT_DURATION, proxy=None):
             try:
                 with requests.get(url, stream=True, timeout=10, proxies=proxies) as r:
                     r.raise_for_status()
+                    chunk_start = time.time()  # Move this outside the for loop
                     for chunk in r.iter_content(chunk_size=CHUNK_SIZE):
                         if chunk:
-                            chunk_start = time.time()  # New: Record start time of chunk download
-                            downloaded += len(chunk)
                             current_time = time.time()
-                            chunk_time = current_time - chunk_start  # New: Calculate time for this chunk
-                            chunk_times.append(chunk_time)  # New: Store chunk time
+                            chunk_time = current_time - chunk_start
+                            chunk_times.append(chunk_time)
+                            last_chunk_time = chunk_time  # Store the last chunk time
+                            downloaded += len(chunk)
                             elapsed_time = current_time - start_time
                             if elapsed_time >= duration:
                                 break
@@ -44,9 +46,10 @@ def measure_download_speed(url, duration=DEFAULT_DURATION, proxy=None):
                             peak_speed = max(peak_speed, speed)
                             if current_time - last_update_time >= 1:  # Update display every second
                                 remaining_time = max(0, duration - elapsed_time)
-                                sys.stdout.write(f"\rDownloaded: {downloaded/1024/1024:.2f} MB, Current Speed: {speed:.2f} MB/s, Peak Speed: {peak_speed:.2f} MB/s, Time left: {remaining_time:.0f}s, Last chunk time: {chunk_time:.4f}s\n")
+                                sys.stdout.write(f"\rDownloaded: {downloaded/1024/1024:.2f} MB, Current Speed: {speed:.2f} MB/s, Peak Speed: {peak_speed:.2f} MB/s, Time left: {remaining_time:.0f}s, Last chunk time: {last_chunk_time:.4f}s\n")
                                 sys.stdout.flush()
                                 last_update_time = current_time
+                            chunk_start = current_time  # Set the start time for the next chunk
                 retry_delay = 1  # Reset retry delay on successful download
             except requests.RequestException as e:
                 error_type = type(e).__name__
@@ -59,7 +62,7 @@ def measure_download_speed(url, duration=DEFAULT_DURATION, proxy=None):
     total_time = time.time() - start_time
     avg_speed = downloaded / total_time / 1024 / 1024  # MB/s
 
-    # New: Calculate and print chunk time statistics
+    # Calculate and print chunk time statistics
     if chunk_times:
         avg_chunk_time = sum(chunk_times) / len(chunk_times)
         min_chunk_time = min(chunk_times)
